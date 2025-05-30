@@ -4,307 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rate Card Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f0f4f8;
-      --card: rgba(255, 255, 255, 0.85);
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --text: #1e293b;
-      --muted: #6b7280;
-      --radius: 16px;
-      --transition: 0.3s ease;
-    }
-
-    [data-theme="dark"] {
-      --bg: #0f172a;
-      --card: rgba(30, 41, 59, 0.8);
-      --primary: #818cf8;
-      --primary-dark: #6366f1;
-      --text: #f8fafc;
-      --muted: #cbd5e1;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      transition: background-color var(--transition), color var(--transition);
-    }
-
-    header {
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-    }
-
-    .theme-toggle-icon {
-      width: 50px;
-      height: 26px;
-      background-color: var(--primary);
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      padding: 3px;
-      cursor: pointer;
-      position: relative;
-      transition: background-color var(--transition);
-    }
-
-    .toggle-circle {
-      width: 20px;
-      height: 20px;
-      background-color: white;
-      border-radius: 50%;
-      transition: transform var(--transition);
-    }
-
-    [data-theme="dark"] .toggle-circle {
-      transform: translateX(24px);
-    }
-
-    .container {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      padding: 2rem;
-      gap: 2rem;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .form-section, .table-section {
-      background: var(--card);
-      backdrop-filter: blur(8px);
-      padding: 2rem;
-      border-radius: var(--radius);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      flex: 1 1 45%;
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-
-    .form-section:hover, .table-section:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 25px 45px rgba(0,0,0,0.15);
-    }
-
-    .form-section label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    .form-section input {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.25rem;
-      border-radius: var(--radius);
-      border: 1px solid #ccc;
-      background: rgba(255,255,255,0.7);
-      color: var(--text);
-    }
-
-    .form-section button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.75rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-weight: bold;
-      transition: background var(--transition);
-    }
-
-    .form-section button:hover {
-      background: var(--primary-dark);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-top: 1rem;
-      transition: transform var(--transition);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-      cursor: pointer;
-    }
-
-    table:hover {
-      transform: scale(1.01);
-    }
-
-    th {
-      background: linear-gradient(to right, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 1rem;
-      font-weight: 600;
-    }
-
-    td {
-      padding: 1rem;
-      text-align: center;
-      background-color: var(--card);
-      border-bottom: 1px solid #e2e8f0;
-      transition: background-color var(--transition);
-    }
-
-    tr:hover td {
-      background-color: rgba(99, 102, 241, 0.05);
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-
-      .form-section, .table-section {
-        flex: 1 1 100%;
-      }
-    }
-  </style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%</text></svg>">
 </head>
 <body data-theme="light">
   <header>
+    <div class="hamburger" id="hamburger">&#9776;</div>
     <h1>Rate Card Calculator</h1>
     <div class="theme-toggle-icon" onclick="toggleTheme()">
       <div class="toggle-circle"></div>
     </div>
   </header>
-  <div class="container">
-    <div class="table-section" id="tableSection" onclick="copyTable()">
-      <table id="rateTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Skills</th>
-            <th>Experience</th>
-            <th>Monthly Rate (INR)</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div class="form-section">
-      <label for="skills">Skills</label>
-      <input type="text" id="skills" placeholder="e.g. React, Node.js" />
-      
-      <label for="experience">Experience</label>
-      <input type="text" id="experience" placeholder="e.g. 5 years" />
-      
-      <label for="lowerCTC">Lower CTC (INR)</label>
-      <input type="number" id="lowerCTC" />
-      
-      <label for="upperCTC">Upper CTC (INR)</label>
-      <input type="number" id="upperCTC" />
-      
-      <label for="expectedHike">Expected Hike (%)</label>
-      <input type="number" id="expectedHike" />
-      
-      <label for="margin">Margin (%)</label>
-      <input type="number" id="margin" />
-      
-      <button onclick="calculateRateCard()">Add to Rate Card</button>
-    </div>
-  </div>
 
-  <script>
-    const tableBody = document.querySelector("#rateTable tbody");
-    let rowCount = 0;
+  <nav id="nav-menu" class="hidden">
+    <ul>
+      <li data-tab="standard" class="active">Standard Calculator</li>
+      <li data-tab="bulk">Bulk Conversion</li>
+    </ul>
+  </nav>
 
-    const MONTHS_PER_YEAR = 12;
-    const DAYS_PER_MONTH = 20;
-    const HOURS_PER_DAY = 8;
+  <main>
+    <!-- Standard Tab -->
+    <section id="standard-tab" class="tab-content active">
+      <div class="container">
+        <div class="form-section">
+          <label>Skills</label><input type="text" id="skills" />
+          <label>Experience</label><input type="text" id="experience" />
+          <label>Lower CTC</label><input type="number" id="lowerCTC" />
+          <label>Upper CTC</label><input type="number" id="upperCTC" />
+          <label>Hike (%)</label><input type="number" id="expectedHike" />
+          <label>Margin (%)</label><input type="number" id="margin" />
+          <button onclick="calculateRateCard()">Add to Rate Card</button>
+          <button type="button" onclick="resetStandard()">Reset</button>
+        </div>
+        <div class="table-section" onclick="copyTable('standard-table')">
+          <table id="standard-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Skills</th>
+                <th>Experience</th>
+                <th>Monthly Rate (INR)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="copied-msg" id="copy-msg-standard">✅ Copied!</div>
+        </div>
+      </div>
+    </section>
 
-    function calculateRate(ctc, hike, margin) {
-      const updated = ctc * (1 + hike / 100);
-      const yearly = updated;
-      const monthly = yearly / MONTHS_PER_YEAR;
-      const daily = monthly / DAYS_PER_MONTH;
-      const hourly = daily / HOURS_PER_DAY;
-      const finalMonthly = monthly * (1 + margin / 100);
-      return {
-        yearly: yearly.toFixed(2),
-        monthly: finalMonthly.toFixed(2),
-        daily: daily.toFixed(2),
-        hourly: hourly.toFixed(2)
-      };
-    }
+    <!-- Bulk Tab -->
+    <section id="bulk-tab" class="tab-content">
+      <div class="container">
+        <div class="form-section">
+          <label>Upload CSV</label><input type="file" id="csv-file" accept=".csv" />
+          <small>
+            Please upload a CSV file with this format:
+            <a href="sample-format.csv" download>📥 Download Sample</a>
+          </small>
+          <label>Hike (%)</label><input type="number" id="bulk-hike" />
+          <label>Margin (%)</label><input type="number" id="bulk-margin" />
+          <button onclick="processCSV()">Convert</button>
+          <button type="button" onclick="resetBulk()">Reset</button>
+        </div>
+        <div class="table-section" onclick="copyTable('bulk-table')">
+          <table id="bulk-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Skills</th>
+                <th>Experience</th>
+                <th>Monthly Rate (INR)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="copied-msg" id="copy-msg-bulk">✅ Copied!</div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    function calculateRateCard() {
-      const skills = document.getElementById("skills").value.trim();
-      const experience = document.getElementById("experience").value.trim();
-      const lowerCTC = parseFloat(document.getElementById("lowerCTC").value);
-      const upperCTC = parseFloat(document.getElementById("upperCTC").value);
-      const expectedHike = parseFloat(document.getElementById("expectedHike").value);
-      const margin = parseFloat(document.getElementById("margin").value);
+  <footer>
+    Made with ❤️ by Aditya Deshmukh
+  </footer>
 
-      if ([skills, experience].includes("") || [lowerCTC, upperCTC, expectedHike, margin].some(isNaN)) {
-        alert("Please fill out all fields correctly!");
-        return;
-      }
-
-      const lower = calculateRate(lowerCTC, expectedHike, margin);
-      const upper = calculateRate(upperCTC, expectedHike, margin);
-      const rateRange = `${lower.monthly} - ${upper.monthly}`;
-
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${++rowCount}</td>
-        <td>${skills}</td>
-        <td>${experience}</td>
-        <td>${rateRange}</td>
-      `;
-      tableBody.appendChild(row);
-      sessionStorage.setItem("tableData", tableBody.innerHTML);
-    }
-
-    function toggleTheme() {
-      const current = document.body.getAttribute("data-theme");
-      const newTheme = current === "dark" ? "light" : "dark";
-      document.body.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
-    }
-
-    function copyTable() {
-      const range = document.createRange();
-      range.selectNode(document.getElementById("rateTable"));
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-      document.execCommand("copy");
-      sel.removeAllRanges();
-      alert("📋 Table copied to clipboard!");
-    }
-
-    window.onload = () => {
-      const savedTheme = localStorage.getItem("theme") || "light";
-      document.body.setAttribute("data-theme", savedTheme);
-      const savedData = sessionStorage.getItem("tableData");
-      if (savedData) {
-        tableBody.innerHTML = savedData;
-        rowCount = tableBody.rows.length;
-      }
-    };
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
-
