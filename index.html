@@ -1,24 +1,29 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rate Card Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #f4f4f9;
-      --text-color: #2b2d42;
-      --card-bg: #ffffff;
-      --accent-color: #ff9f1c;
-      --border-radius: 12px;
+      --bg: #f0f4f8;
+      --card: rgba(255, 255, 255, 0.85);
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --text: #1e293b;
+      --muted: #6b7280;
+      --radius: 16px;
       --transition: 0.3s ease;
     }
+
     [data-theme="dark"] {
-      --bg-color: #2b2d42;
-      --text-color: #edf2f4;
-      --card-bg: #1a1a2e;
-      --accent-color: #ff9f1c;
+      --bg: #0f172a;
+      --card: rgba(30, 41, 59, 0.8);
+      --primary: #818cf8;
+      --primary-dark: #6366f1;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
     }
 
     * {
@@ -27,107 +32,139 @@
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
       transition: background-color var(--transition), color var(--transition);
     }
 
     header {
+      padding: 1.5rem 2rem;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      background-color: var(--card-bg);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      position: relative;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    .theme-toggle {
-      position: absolute;
-      right: 2rem;
+    .theme-toggle-icon {
       width: 50px;
-      height: 25px;
-      background: var(--accent-color);
-      border-radius: 25px;
-      cursor: pointer;
+      height: 26px;
+      background-color: var(--primary);
+      border-radius: 999px;
       display: flex;
       align-items: center;
       padding: 3px;
-      transition: background var(--transition);
+      cursor: pointer;
+      position: relative;
+      transition: background-color var(--transition);
     }
 
-    .theme-toggle span {
+    .toggle-circle {
       width: 20px;
       height: 20px;
-      background: white;
+      background-color: white;
       border-radius: 50%;
       transition: transform var(--transition);
     }
 
-    [data-theme="dark"] .theme-toggle span {
-      transform: translateX(25px);
+    [data-theme="dark"] .toggle-circle {
+      transform: translateX(24px);
     }
 
     .container {
       display: flex;
       flex-direction: row;
-      gap: 2rem;
+      flex-wrap: wrap;
       padding: 2rem;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: auto;
     }
 
     .form-section, .table-section {
-      flex: 1;
+      background: var(--card);
+      backdrop-filter: blur(8px);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      flex: 1 1 45%;
+      transition: transform var(--transition), box-shadow var(--transition);
     }
 
-    .form-section input, .form-section button {
+    .form-section:hover, .table-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 45px rgba(0,0,0,0.15);
+    }
+
+    .form-section label {
       display: block;
-      margin-bottom: 1rem;
-      padding: 0.75rem;
+      margin-top: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .form-section input {
       width: 100%;
-      border-radius: var(--border-radius);
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border-radius: var(--radius);
       border: 1px solid #ccc;
-      background-color: var(--card-bg);
-      color: var(--text-color);
+      background: rgba(255,255,255,0.7);
+      color: var(--text);
     }
 
     .form-section button {
-      background: var(--accent-color);
-      color: var(--text-color);
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--primary);
+      color: white;
       border: none;
-      font-weight: bold;
+      border-radius: var(--radius);
       cursor: pointer;
+      font-weight: bold;
+      transition: background var(--transition);
+    }
+
+    .form-section button:hover {
+      background: var(--primary-dark);
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1rem;
       transition: transform var(--transition);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      cursor: pointer;
     }
 
     table:hover {
       transform: scale(1.01);
-      cursor: pointer;
-    }
-
-    th, td {
-      padding: 1rem;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
     }
 
     th {
-      background-color: var(--accent-color);
-      color: var(--text-color);
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 1rem;
+      text-align: center;
+      background-color: var(--card);
+      border-bottom: 1px solid #e2e8f0;
+      transition: background-color var(--transition);
+    }
+
+    tr:hover td {
+      background-color: rgba(99, 102, 241, 0.05);
     }
 
     tr:last-child td {
@@ -138,37 +175,53 @@
       .container {
         flex-direction: column;
       }
+
+      .form-section, .table-section {
+        flex: 1 1 100%;
+      }
     }
   </style>
 </head>
 <body data-theme="light">
   <header>
     <h1>Rate Card Calculator</h1>
-    <div class="theme-toggle" onclick="toggleTheme()">
-      <span></span>
+    <div class="theme-toggle-icon" onclick="toggleTheme()">
+      <div class="toggle-circle"></div>
     </div>
   </header>
   <div class="container">
-    <div class="table-section">
-      <table id="rateTable" onclick="copyTable()">
+    <div class="table-section" id="tableSection" onclick="copyTable()">
+      <table id="rateTable">
         <thead>
           <tr>
-            <th>Sr. No</th>
+            <th>#</th>
             <th>Skills</th>
             <th>Experience</th>
-            <th>Monthly Rate Card in INR</th>
+            <th>Monthly Rate (INR)</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
     <div class="form-section">
-      <input type="text" id="skills" placeholder="Skills" />
-      <input type="text" id="experience" placeholder="Experience" />
-      <input type="number" id="lowerCTC" placeholder="Lower CTC in INR" />
-      <input type="number" id="upperCTC" placeholder="Upper CTC in INR" />
-      <input type="number" id="expectedHike" placeholder="Expected Hike (%)" />
-      <input type="number" id="margin" placeholder="Margin (%)" />
+      <label for="skills">Skills</label>
+      <input type="text" id="skills" placeholder="e.g. React, Node.js" />
+      
+      <label for="experience">Experience</label>
+      <input type="text" id="experience" placeholder="e.g. 5 years" />
+      
+      <label for="lowerCTC">Lower CTC (INR)</label>
+      <input type="number" id="lowerCTC" />
+      
+      <label for="upperCTC">Upper CTC (INR)</label>
+      <input type="number" id="upperCTC" />
+      
+      <label for="expectedHike">Expected Hike (%)</label>
+      <input type="number" id="expectedHike" />
+      
+      <label for="margin">Margin (%)</label>
+      <input type="number" id="margin" />
+      
       <button onclick="calculateRateCard()">Add to Rate Card</button>
     </div>
   </div>
@@ -177,53 +230,69 @@
     const tableBody = document.querySelector("#rateTable tbody");
     let rowCount = 0;
 
+    const MONTHS_PER_YEAR = 12;
+    const DAYS_PER_MONTH = 20;
+    const HOURS_PER_DAY = 8;
+
     function calculateRate(ctc, hike, margin) {
-      const updatedCTC = ctc + (ctc * hike / 100);
-      const monthly = updatedCTC / 12;
-      const withMargin = monthly + (monthly * margin / 100);
-      return withMargin.toFixed(2);
+      const updated = ctc * (1 + hike / 100);
+      const yearly = updated;
+      const monthly = yearly / MONTHS_PER_YEAR;
+      const daily = monthly / DAYS_PER_MONTH;
+      const hourly = daily / HOURS_PER_DAY;
+      const finalMonthly = monthly * (1 + margin / 100);
+      return {
+        yearly: yearly.toFixed(2),
+        monthly: finalMonthly.toFixed(2),
+        daily: daily.toFixed(2),
+        hourly: hourly.toFixed(2)
+      };
     }
 
     function calculateRateCard() {
-      const skills = document.getElementById("skills").value;
-      const experience = document.getElementById("experience").value;
+      const skills = document.getElementById("skills").value.trim();
+      const experience = document.getElementById("experience").value.trim();
       const lowerCTC = parseFloat(document.getElementById("lowerCTC").value);
       const upperCTC = parseFloat(document.getElementById("upperCTC").value);
       const expectedHike = parseFloat(document.getElementById("expectedHike").value);
       const margin = parseFloat(document.getElementById("margin").value);
 
-      if (isNaN(lowerCTC) || isNaN(upperCTC) || isNaN(expectedHike) || isNaN(margin)) return;
+      if ([skills, experience].includes("") || [lowerCTC, upperCTC, expectedHike, margin].some(isNaN)) {
+        alert("Please fill out all fields correctly!");
+        return;
+      }
 
-      const lowerRate = calculateRate(lowerCTC, expectedHike, margin);
-      const upperRate = calculateRate(upperCTC, expectedHike, margin);
-      const range = `${lowerRate} - ${upperRate}`;
+      const lower = calculateRate(lowerCTC, expectedHike, margin);
+      const upper = calculateRate(upperCTC, expectedHike, margin);
+      const rateRange = `${lower.monthly} - ${upper.monthly}`;
 
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${++rowCount}</td>
         <td>${skills}</td>
         <td>${experience}</td>
-        <td>${range}</td>
+        <td>${rateRange}</td>
       `;
       tableBody.appendChild(row);
-
       sessionStorage.setItem("tableData", tableBody.innerHTML);
     }
 
     function toggleTheme() {
       const current = document.body.getAttribute("data-theme");
-      const next = current === "dark" ? "light" : "dark";
-      document.body.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
+      const newTheme = current === "dark" ? "light" : "dark";
+      document.body.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
     }
 
     function copyTable() {
       const range = document.createRange();
       range.selectNode(document.getElementById("rateTable"));
-      window.getSelection().removeAllRanges();
-      window.getSelection().addRange(range);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
       document.execCommand("copy");
-      window.getSelection().removeAllRanges();
+      sel.removeAllRanges();
+      alert("📋 Table copied to clipboard!");
     }
 
     window.onload = () => {
@@ -238,3 +307,4 @@
   </script>
 </body>
 </html>
+
